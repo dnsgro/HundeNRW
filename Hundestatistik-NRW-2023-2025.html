@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hundestatistik NRW 2023–2025</title>
+<style>
+:root{--bg:#f5f4f0;--card:#fff;--ink:#1c1c1f;--mute:#66666d;--line:#e3e1db;--soft:#efede8;--accent:#1f4e8c;
+--c3:#c4412f;--c10:#d48a1a;--c11:#2f6db3;--ck:#2f9467;--y21:#cdd5e0;--y22:#a9b8cc;--y23:#7f97b7;--y24:#4f74a6;--y25:#1f4e8c;
+--hum:#c4412f;--ani:#d48a1a;--oth:#7a7f8c;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#121214;--card:#1c1c20;--ink:#ececef;--mute:#9b9ba4;--line:#2d2d33;--soft:#26262b;--accent:#7fa8e0;
+--c3:#e0695a;--c10:#e6a64a;--c11:#6f9fdb;--ck:#5cbf91;--y21:#3a4252;--y22:#4c5b74;--y23:#5f7699;--y24:#7f9fcc;--y25:#b3cdf0;
+--hum:#e0695a;--ani:#e6a64a;--oth:#9aa0ad;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px 56px}
+header{padding:28px 0 6px}
+h1{font-size:clamp(22px,4.2vw,30px);margin:0 0 4px;letter-spacing:-.01em;line-height:1.2}
+.sub{color:var(--mute);margin:0;font-size:14px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:12px 0;border-bottom:1px solid var(--line);margin-bottom:18px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 14px;border-radius:999px;font:inherit;font-size:14px;white-space:nowrap;cursor:pointer}
+.tab[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card);flex-wrap:wrap}
+.seg button{border:0;background:none;padding:6px 12px;font:inherit;font-size:14px;color:var(--ink);cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--bg)}
+section{display:none}section.on{display:block}
+h2{font-size:18px;margin:26px 0 10px}h2:first-child{margin-top:4px}
+h3{font-size:15px;margin:0 0 6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.grid{display:grid;gap:10px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.kpi .l{color:var(--mute);font-size:13px;line-height:1.3}
+.kpi .v{font-size:25px;font-weight:650;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12.5px;color:var(--mute)}
+.up{color:var(--c3)}.down{color:var(--ck)}
+.facts{margin:0;padding-left:20px}.facts li{margin:0 0 9px}
+.two{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:760px){.two{grid-template-columns:1.4fr 1fr}}
+.head{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-bottom:10px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mute);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.chart svg{width:100%;height:auto;display:block}
+svg text{fill:var(--mute);font-size:14px;font-family:inherit}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:7px;opacity:0;transition:opacity .12s;z-index:60;max-width:260px}
+.note{font-size:13px;color:var(--mute);margin:8px 0 0}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+select,input[type=search]{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+input[type=search]{flex:1;min-width:150px}
+label.chk{font-size:13.5px;color:var(--mute);display:flex;gap:6px;align-items:center;cursor:pointer}
+.catcards{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:12px}
+.catcard{cursor:pointer;border-left:4px solid var(--line);padding:10px 12px}
+.catcard.sel{outline:2px solid var(--ink)}
+.catcard .n{font-weight:600;font-size:13.5px}.catcard .s{font-size:12.5px;color:var(--mute)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right;vertical-align:middle;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+th{font-size:12px;color:var(--mute);font-weight:600;cursor:pointer;user-select:none;white-space:nowrap}
+th.s::after{content:" ▾"}th.s.asc::after{content:" ▴"}
+tbody tr{cursor:pointer}tbody tr:hover{background:var(--soft)}
+td small{color:var(--mute)}
+.badge{display:inline-block;font-size:10.5px;font-weight:650;padding:1px 6px;border-radius:5px;color:#fff;margin-left:6px;vertical-align:1px;white-space:nowrap}
+.rate{min-width:90px}
+@media(max-width:560px){table{font-size:13px}th,td{padding:7px 3px}.rate{min-width:64px}td:first-child .badge{display:table;margin:3px 0 0}}
+.bar{height:7px;border-radius:4px;background:var(--soft);overflow:hidden;margin-top:3px}
+.bar span{display:block;height:100%;border-radius:4px}
+.dim{opacity:.6}
+.hb{margin:12px 0}.hb .t{font-size:13.5px;margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.hb .row{display:flex;align-items:center;gap:8px;margin:3px 0;font-size:12.5px;color:var(--mute)}
+.hb .row .y{width:34px}.hb .track{flex:1;background:var(--soft);border-radius:4px;height:14px;overflow:hidden}
+.hb .track span{display:block;height:100%;border-radius:4px}
+.hb .row .val{width:52px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+ul.crit{margin:6px 0 0;padding-left:20px;font-size:14px}
+#detail{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:50}
+#detail.open{display:flex}
+.sheet{background:var(--card);width:min(660px,100%);max-height:88vh;overflow:auto;border-radius:16px 16px 0 0;padding:18px 16px 22px}
+@media(min-width:700px){#detail{align-items:center}.sheet{border-radius:16px}}
+.sheet .x{float:right;border:0;background:var(--soft);color:var(--ink);border-radius:999px;width:32px;height:32px;font-size:18px;cursor:pointer}
+.sheet table td,.sheet table th{font-size:13.5px}
+.sheet .nt{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14px;margin:10px 0}
+.donutwrap{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.donutwrap svg{width:190px;height:190px;flex:none}
+.dl{flex:1;min-width:180px;font-size:13.5px}.dl div{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px dashed var(--line)}
+.dl i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
+footer{margin-top:32px;font-size:12.5px;color:var(--mute);border-top:1px solid var(--line);padding-top:12px}
+footer a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Hundestatistik NRW 2023–2025</h1>
+  <p class="sub">Interaktive Auswertung des Berichts des NRW-Ministeriums für Landwirtschaft und Verbraucherschutz vom 5. Mai 2026 (Landeshundegesetz NRW)</p>
+</header>
+
+<nav role="tablist">
+  <button class="tab" data-t="ov" aria-selected="true">Überblick</button>
+  <button class="tab" data-t="tr" aria-selected="false">Entwicklung</button>
+  <button class="tab" data-t="br" aria-selected="false">Rassen</button>
+  <button class="tab" data-t="sv" aria-selected="false">Erhebliche Verletzungen</button>
+  <button class="tab" data-t="rg" aria-selected="false">Regierungsbezirke</button>
+</nav>
+
+<!-- ÜBERBLICK -->
+<section id="ov" class="on">
+  <div class="head"><h2 style="margin:0">Kennzahlen</h2><div class="seg" id="kpiYear"><button data-v="2023">2023</button><button data-v="2024">2024</button><button data-v="2025" class="on">2025</button></div></div>
+  <div class="grid kpis" id="kpis"></div>
+
+  <div class="two" style="margin-top:14px">
+    <div class="card">
+      <h3>Die wichtigsten Aussagen</h3>
+      <ul class="facts">
+        <li><b>Keine Todesfälle:</b> In allen drei Jahren ist in NRW kein Mensch an einem Hundebiss gestorben.</li>
+        <li><b>Bestand:</b> 2024 war mit 989.734 registrierten Hunden ein Höchststand, 2025 ging die Zahl leicht auf 972.464 zurück. Kleine Hunde sind nicht meldepflichtig – die echte Zahl dürfte höher liegen.</li>
+        <li><b>„Listenhunde“ werden weniger:</b> Hunde nach § 3 (Pitbull &amp; Co.) sanken auf 5.893 – den niedrigsten Stand seit Einführung des Gesetzes 2003. Auch § 10-Rassen (u. a. Rottweiler) gehen auf 7.867 zurück.</li>
+        <li><b>Rechtsprechung:</b> Ein OVG-Urteil von 2020 machte die Einstufung von Mischlingen als „gefährlich“ sehr schwer; 2025 hat das OVG das wieder gekippt. Das Ministerium erwartet daher möglicherweise wieder steigende Zahlen.</li>
+        <li><b>Relative Beißhäufigkeit:</b> § 3- und § 10-Hunde beißen im Verhältnis zu ihrer Zahl deutlich häufiger als große oder kleine Hunde allgemein – trotz strenger Auflagen.</li>
+        <li><b>Auffällige Rassen:</b> Pitbull Terrier (§ 3), Tosa Inu (§ 10, sehr kleine Population), Presa Canario (§ 11, 10-Jahres-Schnitt) sowie neu beobachtet Malinois und Kangal. Der Miniatur-Bullterrier liegt im Schnitt mehr als doppelt so hoch wie große Hunde.</li>
+        <li><b>Neu seit 2024:</b> Bissvorfälle werden nach Erheblichkeit getrennt erfasst; zudem wurden u. a. Australian Shepherd, Border Collie, Cane Corso, Husky und Kangal in die Beobachtung aufgenommen. Berner Sennenhund, Golden Retriever und Münsterländer fielen raus.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Verteilung der Hunde 2025</h3>
+      <div class="donutwrap" id="donut"></div>
+      <p class="note">Antippen bzw. Überfahren zeigt Werte.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ENTWICKLUNG -->
+<section id="tr">
+  <h2>Bestand im Zeitverlauf</h2>
+  <div class="card">
+    <div class="controls"><div class="seg" id="trCat"><button data-v="p3" class="on">§ 3 gefährliche Hunde</button><button data-v="p10">§ 10 bestimmte Rassen</button><button data-v="p11">§ 11 große Hunde</button></div></div>
+    <div class="chart" id="trChart"></div>
+    <p class="note" id="trNote"></p>
+  </div>
+
+  <h2>Vorfälle je 100 registrierte Hunde nach Kategorie</h2>
+  <div class="card">
+    <div class="controls"><div class="seg" id="qMet"><button data-v="hm" class="on">Bisse – Mensch</button><button data-v="an">Bisse – Tier</button><button data-v="so">Sonstige Vorfälle</button></div></div>
+    <div class="chart" id="qChart"></div>
+    <p class="note">„v. H.“ = Vorfälle je 100 gemeldete Hunde der Kategorie. Berechnet aus den absoluten Zahlen des Berichts.</p>
+  </div>
+
+  <h2>Vorfälle in absoluten Zahlen 2021–2025</h2>
+  <div class="card">
+    <div class="controls"><div class="seg" id="absCat"><button data-v="p3" class="on">§ 3 Abs. 2</button><button data-v="p10">§ 10 Abs. 1</button></div></div>
+    <div class="chart" id="absChart"></div>
+  </div>
+</section>
+
+<!-- RASSEN -->
+<section id="br">
+  <h2>Rassen-Explorer</h2>
+  <div class="controls">
+    <div class="seg" id="bYear"><button data-v="2023">2023</button><button data-v="2024">2024</button><button data-v="2025" class="on">2025</button></div>
+    <select id="bMet"><option value="hm">Bisse mit Verletzung – Mensch</option><option value="an">Bisse mit Verletzung – Tier</option><option value="so">Sonstige gefährliche Vorfälle</option></select>
+  </div>
+  <div class="grid catcards" id="catcards"></div>
+  <div class="controls">
+    <input type="search" id="bQ" placeholder="Rasse suchen …">
+    <label class="chk"><input type="checkbox" id="bMin"> nur ab 500 Hunden</label>
+  </div>
+  <div class="card tbl" style="padding:6px 10px">
+    <table><thead><tr>
+      <th data-s="name">Rasse</th><th data-s="reg">Hunde</th><th data-s="abs">Vorfälle</th><th data-s="rate" class="s">je 100 Hunde</th>
+    </tr></thead><tbody id="bBody"></tbody></table>
+  </div>
+  <p class="note">Zeile antippen für alle Werte 2023–2025. * = weniger als 500 Hunde – bei so kleinen Beständen schwankt die Quote durch einzelne Vorfälle stark. „erh.“ = erhebliche Verletzung (erst ab 2024 erfasst).</p>
+</section>
+
+<!-- ERHEBLICH -->
+<section id="sv">
+  <h2>Anteil erheblicher Verletzungen an der Population</h2>
+  <div class="card">
+    <div class="controls"><div class="seg" id="svMet"><button data-v="hmE" class="on">am Menschen</button><button data-v="anE">am anderen Tier</button></div></div>
+    <div id="svBars"></div>
+    <p class="note" id="svNote"></p>
+  </div>
+  <div class="two" style="margin-top:12px">
+    <div class="card"><h3>Kriterien „erheblich“ – Mensch</h3>
+      <ul class="crit"><li>Tod infolge des Bisses</li><li>dauerhafte körperliche Beeinträchtigung</li><li>chirurgische Versorgung nötig</li><li>stationärer Krankenhausaufenthalt</li><li>Ausfall in Beruf oder Schule</li></ul></div>
+    <div class="card"><h3>Kriterien „erheblich“ – Tier</h3>
+      <ul class="crit"><li>Tod infolge des Bisses</li><li>dauerhafte körperliche Beeinträchtigung</li><li>tiefe Muskelverletzung oder eröffnete Körperhöhle</li><li>schwere Verletzungen am Hals</li></ul></div>
+  </div>
+</section>
+
+<!-- BEZIRKE -->
+<section id="rg">
+  <h2>Gemeldete Hunde nach Regierungsbezirk</h2>
+  <div class="card">
+    <div class="controls"><div class="seg" id="rgCat"><button data-v="p3" class="on">§ 3 Abs. 2</button><button data-v="p10">§ 10 Abs. 1</button><button data-v="p11">§ 11 große Hunde</button></div></div>
+    <div class="chart" id="rgChart"></div>
+    <p class="note" id="rgNote"></p>
+  </div>
+</section>
+
+<footer>
+  Quelle: Ministerium für Landwirtschaft und Verbraucherschutz NRW, „Auswertung der Berichte über die Statistik der in den Jahren 2023 bis 2025 in Nordrhein-Westfalen behördlich erfassten Hunde“, Düsseldorf, 5. Mai 2026 –
+  <a href="https://www.mlv.nrw.de/wp-content/uploads/2026/05/Bericht-Hundestatistik-2023-2025-1.pdf">PDF</a>.
+  Quoten (v. H.) wurden aus den absoluten Zahlen der Berichtsblätter neu berechnet; in einzelnen Summenzeilen des Berichts stehen abweichende Werte.
+</footer>
+</div>
+
+<div id="tip"></div>
+<div id="detail"><div class="sheet" id="sheet"></div></div>
+
+<script id="raw">
+/* 2023: [Rasse, Hunde, Bisse Mensch, Bisse Tier, sonstige, §3(3), Strafverf., OWi]
+   2024/2025: [Rasse, Hunde, Mensch erh., Mensch nicht erh., Tier erh., Tier nicht erh., sonstige, §3(3), Strafverf., OWi] */
+const RAW={
+2023:{
+ p3:[["Pitbull Terrier",340,4,4,1,0,0,7],["American Staffordshire Terrier",2403,10,17,3,4,3,55],["Staffordshire Bullterrier",287,0,2,0,0,0,4],["Bullterrier",427,1,2,3,1,0,8],["Kreuzungen (§ 3)",2782,9,13,4,7,0,45]],
+ p10:[["Alano",96,0,0,0,0,0,1],["American Bulldog",1170,6,7,6,1,3,15],["Bullmastiff",196,1,0,0,0,0,3],["Mastiff",108,0,0,0,0,0,0],["Mastino Español",26,0,0,0,0,0,0],["Mastino Napoletano",53,2,2,3,0,0,1],["Fila Brasileiro",33,0,0,0,0,0,0],["Dogo Argentino",479,2,2,2,0,0,17],["Rottweiler",4434,21,20,6,5,4,60],["Tosa Inu",22,1,1,2,0,0,3],["Kreuzungen (§ 10)",2210,13,8,1,0,3,21]],
+ p11:[["Berner Sennenhund",13325,11,8,6,2,3,26],["Dobermann",5602,18,17,9,9,3,41],["Deutsch Drahthaar",4200,8,13,2,3,3,17],["Golden Retriever",32271,22,13,5,2,6,54],["Münsterländer",7695,6,8,2,2,2,19],["Schäferhund (bis 2023 ungeteilt)",40551,157,127,28,40,18,323],["Schäferhund-Mix (bis 2023)",31881,58,45,51,30,7,150],["Presa Canario (Dogo Canario)",759,10,4,0,2,5,43],["Sonstige große Hunde & Mischlinge",469599,631,738,353,177,89,2017]],
+ kl:[["Miniatur-Bullterrier",1639,10,9,2,4,1,5],["Alle anderen kleinen Hunde",359659,195,107,54,13,20,253]]
+},
+2024:{
+ p3:[["Pitbull Terrier",360,1,0,0,3,1,1,1,7],["American Staffordshire Terrier",2299,4,5,11,9,5,9,3,58],["Staffordshire Bullterrier",326,1,2,0,1,0,0,0,0],["Bullterrier",415,0,4,0,0,2,1,0,7],["Kreuzungen (§ 3)",2773,2,5,1,7,3,11,0,50]],
+ p10:[["Alano",62,1,0,0,1,0,0,0,1],["American Bulldog",1127,2,3,5,2,3,0,2,21],["Bullmastiff",212,0,0,0,1,0,1,0,1],["Mastiff",72,0,0,0,0,1,0,0,1],["Mastino Español",25,0,0,0,0,0,0,0,0],["Mastino Napoletano",46,0,0,0,0,0,0,0,0],["Fila Brasileiro",28,0,0,0,0,0,0,0,0],["Dogo Argentino",482,1,1,1,3,1,0,2,4],["Rottweiler",3983,9,8,3,17,13,8,9,56],["Tosa Inu",70,0,1,0,0,0,1,0,5],["Kreuzungen (§ 10)",1997,1,19,8,12,0,2,3,33]],
+ p11:[["Akita Inu",1864,5,6,8,9,3,6,2,20],["Australian Shepherd",20406,12,29,11,17,15,9,6,81],["Belgischer Schäferhund (Malinois)",6473,29,32,17,24,6,14,15,96],["Border Collie",13564,6,16,6,12,2,0,2,48],["Cane Corso",4830,8,10,15,18,18,3,7,77],["Deutsch Drahthaar",4167,3,5,9,6,3,3,1,20],["Deutsche Dogge",3700,6,7,3,10,7,0,3,29],["Deutscher Schäferhund",35965,39,71,43,81,34,31,24,217],["Dobermann",7516,17,20,3,3,12,10,2,37],["Presa Canario (Dogo Canario)",661,3,4,2,1,1,1,2,12],["Hovawart",4199,7,6,4,4,1,1,3,9],["Kangal",1791,5,11,12,8,14,8,11,35],["Rhodesian Ridgeback",11002,5,13,9,17,6,1,4,44],["Saarlooswolfhund",1424,1,0,0,0,0,0,0,0],["Siberian Husky",6049,1,7,17,16,10,5,4,66],["Tschechoslowakischer Wolfhund",175,0,2,0,0,0,0,1,0],["Weimaraner",3145,6,8,3,6,3,2,3,18],["Sonstige große Hunde & Mischlinge",486837,218,562,236,567,409,179,117,2557]],
+ kl:[["Miniatur-Bullterrier",1726,2,14,1,6,1,2,2,4],["Alle anderen kleinen Hunde",359963,31,157,34,59,31,13,30,195]]
+},
+2025:{
+ p3:[["Pitbull Terrier",357,4,3,0,2,1,2,3,8],["American Staffordshire Terrier",2215,5,2,8,7,5,2,4,34],["Staffordshire Bullterrier",304,0,0,0,1,0,0,0,2],["Bullterrier",433,0,0,0,1,0,1,0,4],["Kreuzungen (§ 3)",2584,1,7,1,6,1,5,0,34]],
+ p10:[["Alano",54,0,1,0,1,1,0,1,0],["American Bulldog",1109,2,2,3,2,2,0,1,12],["Bullmastiff",191,0,0,0,1,0,1,0,0],["Mastiff",66,0,0,0,0,0,0,0,0],["Mastino Español",25,0,0,0,0,0,0,0,0],["Mastino Napoletano",41,0,0,0,0,0,2,0,0],["Fila Brasileiro",24,0,0,0,0,0,0,0,0],["Dogo Argentino",434,0,1,0,4,5,1,0,11],["Rottweiler",3892,11,6,5,13,9,9,3,52],["Tosa Inu",40,0,0,0,0,0,0,0,6],["Kreuzungen (§ 10)",1991,0,10,1,9,0,2,1,35]],
+ p11:[["Akita Inu",2014,8,3,5,8,4,2,0,6],["Australian Shepherd",22421,10,34,7,22,16,7,0,99],["Belgischer Schäferhund (Malinois)",6216,22,30,22,17,20,13,2,77],["Border Collie",13702,9,20,3,12,7,2,1,69],["Cane Corso",5174,10,21,7,21,29,6,1,94],["Deutsch Drahthaar",3941,0,4,7,6,4,1,0,20],["Deutsche Dogge",3697,3,6,3,7,4,0,1,17],["Deutscher Schäferhund",29800,34,77,35,77,48,30,4,193],["Dobermann",5342,8,6,2,7,3,2,0,32],["Presa Canario (Dogo Canario)",1044,1,2,2,3,1,2,1,14],["Hovawart",4109,2,8,0,8,5,2,0,21],["Kangal",1708,8,8,5,11,20,6,0,32],["Rhodesian Ridgeback",9248,5,14,5,16,8,3,0,36],["Saarlooswolfhund",261,0,0,0,0,0,0,0,1],["Siberian Husky",6468,2,1,17,14,6,2,1,58],["Tschechoslowakischer Wolfhund",227,0,0,1,0,0,0,0,1],["Weimaraner",5179,2,8,4,5,1,3,1,15],["Sonstige große Hunde & Mischlinge",491229,173,554,179,531,336,159,46,2426]],
+ kl:[["Miniatur-Bullterrier",2547,9,6,2,3,0,3,0,4],["Alle anderen kleinen Hunde",344377,20,173,17,78,56,4,8,225]]
+}};
+const TREND={
+ p3:{from:2006,v:[12431,12023,11927,10202,10063,9346,8583,8015,7252,7289,7377,7311,6617,6225,6463,6508,6175,6239,6173,5893]},
+ p10:{from:2006,v:[12389,12049,12106,11886,11597,11094,10465,10145,9389,9591,9627,9873,9432,9005,9096,9079,8860,8827,8104,7867]},
+ p11:{from:2016,v:[538500,547956,555048,545587,565886,600461,590109,605883,613768,611780],min:500000}
+};
+const ABS={ // 2021–2025: Mensch, Tier, sonstige
+ p3:{hm:[32,15,24,24,22],an:[54,31,38,32,26],so:[28,11,11,11,7]},
+ p10:{hm:[40,48,46,46,33],an:[69,45,40,53,39],so:[24,21,20,18,17]}
+};
+const REG={
+ p3:{years:[2021,2022,2023,2024,2025],d:{"Arnsberg":[1447,1327,1270,1265,1228],"Detmold":[572,606,659,677,660],"Düsseldorf":[1982,1813,1988,1824,1826],"Köln":[1797,1749,1673,1707,1633],"Münster":[683,603,649,727,623]}},
+ p10:{years:[2021,2022,2023,2024,2025],d:{"Arnsberg":[1706,1707,1618,1463,1529],"Detmold":[748,842,777,696,729],"Düsseldorf":[2833,2446,2741,2594,2382],"Köln":[2781,2764,2654,2370,2287],"Münster":[1011,1101,1037,981,940]}},
+ p11:{years:[2023,2024,2025],d:{"Arnsberg":[113211,114235,116676],"Detmold":[80204,80955,79501],"Düsseldorf":[168368,178875,167872],"Köln":[153457,145413,152216],"Münster":[90643,94290,95515]}}
+};
+</script>
+
+<script>
+const YEARS=[2023,2024,2025];
+const CAT={
+ p3:{short:'§ 3',name:'Gefährliche Hunde (§ 3 Abs. 2)',col:'var(--c3)'},
+ p10:{short:'§ 10',name:'Bestimmte Rassen (§ 10 Abs. 1)',col:'var(--c10)'},
+ p11:{short:'§ 11',name:'Große Hunde (§ 11)',col:'var(--c11)'},
+ kl:{short:'klein',name:'Kleine Hunde',col:'var(--ck)'}
+};
+const MET={hm:'Bisse mit Verletzung – Mensch',an:'Bisse mit Verletzung – Tier',so:'Sonstige gefährliche Vorfälle'};
+const NOTES={
+ "Pitbull Terrier":"Im 10-Jahres-Schnitt die auffälligste § 3-Rasse – bei Bissen an Menschen, an Tieren und bei sonstigen Vorfällen, obwohl die Haltung stark reglementiert ist.",
+ "American Staffordshire Terrier":"Mit Abstand meistgehaltene § 3-Rasse. 2025 gingen 8 der 9 erheblichen Tier-Bissvorfälle der § 3-Kategorie auf sie zurück.",
+ "Rottweiler":"Mit Abstand meistgehaltene § 10-Rasse. 2025: 11 erhebliche Bissverletzungen bei Menschen und 9 Gefährlichkeitsfeststellungen im Einzelfall.",
+ "Tosa Inu":"Im 10-Jahres-Schnitt die auffälligste § 10-Rasse bei Tier-Bissen und sonstigen Vorfällen – bei sehr kleiner Population, daher stark schwankende Quoten.",
+ "Fila Brasileiro":"Einzige § 10-Rasse ohne Bissvorfall an Menschen in den letzten zehn Jahren.",
+ "Mastino Español":"2023–2025 unauffällig, im 10-Jahres-Schnitt auch ohne Tier-Bisse.",
+ "Mastiff":"2023–2025 ohne Bissvorfälle.",
+ "Deutscher Schäferhund":"Meistgehaltene § 11-Rasse mit den absolut meisten Vorfällen. Relativ im Mittelfeld, 2025 trotz rund 6.000 Hunden weniger leicht mehr Vorfälle – soll weiter beobachtet werden.",
+ "Belgischer Schäferhund (Malinois)":"Seit 2024 gesondert erfasst. Relativ sehr hohe Bissquote bei Menschen; weitere Beobachtung angekündigt.",
+ "Kangal":"Seit 2024 erfasst. Gehört zu den Rassen mit der höchsten relativen Vorfallquote; weitere Beobachtung nötig.",
+ "Presa Canario (Dogo Canario)":"2023 höchste relative Bissquote der großen Hunde. 2025 trotz mehr Haltungen deutlich weniger Vorfälle – im 10-Jahres-Schnitt aber weiterhin die auffälligste § 11-Rasse.",
+ "Miniatur-Bullterrier":"Gilt in NRW als kleiner Hund. 10-Jahres-Schnitt: 0,39 Bisse an Menschen je 100 Hunde – mehr als doppelt so viel wie große Hunde (0,15). Haltungen 2025 stark auf 2.547 gestiegen.",
+ "Schäferhund (bis 2023 ungeteilt)":"Bis 2023 als „Schäferhund“ erfasst; seit 2024 getrennt nach Deutschem und Belgischem Schäferhund.",
+ "Schäferhund-Mix (bis 2023)":"Seit 2024 bei den sonstigen großen Hunden und Mischlingen gezählt.",
+ "Berner Sennenhund":"Seit 2024 nicht mehr gesondert erfasst – zu geringe Auffälligkeit.",
+ "Golden Retriever":"Seit 2024 nicht mehr gesondert erfasst – zu geringe Auffälligkeit.",
+ "Münsterländer":"Seit 2024 nicht mehr gesondert erfasst – zu geringe Auffälligkeit."
+};
+
+/* --- Daten aufbereiten --- */
+const DATA={};
+for(const y of YEARS){DATA[y]=[];for(const c in RAW[y])for(const r of RAW[y][c])DATA[y].push(y===2023
+ ?{name:r[0],cat:c,reg:r[1],hm:r[2],hmE:null,an:r[3],anE:null,so:r[4],d33:r[5],st:r[6],owi:r[7]}
+ :{name:r[0],cat:c,reg:r[1],hm:r[2]+r[3],hmE:r[2],an:r[4]+r[5],anE:r[4],so:r[6],d33:r[7],st:r[8],owi:r[9]})}
+function sum(rows){const s={reg:0,hm:0,hmE:0,an:0,anE:0,so:0,d33:0,st:0,owi:0};for(const r of rows)for(const k in s){if(r[k]==null)s[k]=null;else if(s[k]!=null)s[k]+=r[k]}return s}
+const tot=(y,c)=>sum(DATA[y].filter(r=>!c||r.cat===c));
+
+/* --- Format --- */
+const nf=new Intl.NumberFormat('de-DE');
+const f=n=>n==null?'–':nf.format(n);
+const p3f=new Intl.NumberFormat('de-DE',{minimumFractionDigits:3,maximumFractionDigits:3});
+const p2f=new Intl.NumberFormat('de-DE',{maximumFractionDigits:2});
+const rate=(n,reg)=>reg?n/reg*100:0;
+const $=s=>document.querySelector(s);
+
+/* --- Tooltip --- */
+const tip=$('#tip');
+function showTip(e,t){tip.textContent=t;tip.style.opacity=1;const w=tip.offsetWidth,h=tip.offsetHeight;
+ let x=Math.min(Math.max(8,e.clientX-w/2),innerWidth-w-8),y=e.clientY-h-12;if(y<8)y=e.clientY+16;tip.style.left=x+'px';tip.style.top=y+'px'}
+document.addEventListener('mousemove',e=>{const t=e.target.closest&&e.target.closest('[data-tip]');if(t)showTip(e,t.dataset.tip);else tip.style.opacity=0});
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-tip]');if(t)showTip(e,t.dataset.tip)});
+addEventListener('scroll',()=>tip.style.opacity=0,{passive:true});
+
+/* --- UI-Helfer --- */
+function seg(id,cb){const el=$(id);el.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ el.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));cb(b.dataset.v)})}
+document.querySelectorAll('nav .tab').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('nav .tab').forEach(x=>x.setAttribute('aria-selected',x===b));
+ document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));
+ scrollTo({top:0,behavior:'smooth'})});
+
+/* --- Charts --- */
+function niceStep(r){if(r<=0)return 1;const p=10**Math.floor(Math.log10(r)),n=r/p;return(n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p}
+function axis(lo,mx){const step=niceStep((mx-lo)/5);const hi=lo+Math.ceil((mx-lo)/step)*step||lo+step;return{lo,hi,step,n:Math.round((hi-lo)/step)}}
+function lineChart(el,labels,vals,{color='var(--accent)',min=0}={}){
+ const W=640,H=270,L=70,R=14,T=14,B=32,pw=W-L-R,ph=H-T-B,n=vals.length,a=axis(min,Math.max(...vals));
+ const x=i=>L+i*pw/(n-1),y=v=>T+ph-(v-a.lo)/(a.hi-a.lo)*ph;
+ let s=`<svg viewBox="0 0 ${W} ${H}">`;
+ for(let i=0;i<=a.n;i++){const v=a.lo+a.step*i,yy=y(v);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" style="stroke:var(--line)"/><text x="${L-8}" y="${yy+4}" text-anchor="end">${f(v)}</text>`}
+ const ev=Math.ceil(n/10);labels.forEach((l,i)=>{if(i%ev===(n-1)%ev)s+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${l}</text>`});
+ const pts=vals.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+ s+=`<polygon points="${x(0)},${T+ph} ${pts} ${x(n-1)},${T+ph}" style="fill:${color};opacity:.12"/>`;
+ s+=`<polyline points="${pts}" style="fill:none;stroke:${color};stroke-width:2.5;stroke-linejoin:round"/>`;
+ vals.forEach((v,i)=>{const t=`${labels[i]}: ${f(v)} Hunde`+(i?` (${v>=vals[i-1]?'+':''}${f(v-vals[i-1])})`:'');
+  s+=`<circle cx="${x(i)}" cy="${y(v)}" r="3.8" style="fill:var(--card);stroke:${color};stroke-width:2"/><circle cx="${x(i)}" cy="${y(v)}" r="13" style="fill:transparent" data-tip="${t}"/>`});
+ el.innerHTML=s+'</svg>'}
+function barChart(el,groups,series,{fmt=f,unit=''}={}){
+ const W=640,H=270,L=66,R=8,T=14,B=32,pw=W-L-R,ph=H-T-B,a=axis(0,Math.max(...series.flatMap(s=>s.values)));
+ const gw=pw/groups.length,inner=gw*.8,bw=inner/series.length;
+ let s=`<svg viewBox="0 0 ${W} ${H}">`;
+ for(let i=0;i<=a.n;i++){const v=a.step*i,yy=T+ph-v/a.hi*ph;s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" style="stroke:var(--line)"/><text x="${L-8}" y="${yy+4}" text-anchor="end">${fmt(v)}</text>`}
+ groups.forEach((g,gi)=>{series.forEach((sr,si)=>{const v=sr.values[gi],h=Math.max(v/a.hi*ph,v>0?1:0),xx=L+gi*gw+(gw-inner)/2+si*bw;
+  s+=`<rect x="${xx+1}" y="${T+ph-h}" width="${Math.max(bw-2,1)}" height="${h}" rx="2" style="fill:${sr.color}"/><rect x="${xx}" y="${T}" width="${bw}" height="${ph}" style="fill:transparent" data-tip="${g} · ${sr.name}: ${fmt(v)}${unit}"/>`});
+  s+=`<text x="${L+gi*gw+gw/2}" y="${H-6}" text-anchor="middle">${g}</text>`});
+ el.innerHTML=s+'</svg><div class="legend">'+series.map(x=>`<span><i style="background:${x.color}"></i>${x.name}</span>`).join('')+'</div>'}
+
+/* --- Überblick --- */
+function delta(a,b){if(b==null||!b)return'';const d=(a-b)/b*100;return`<span class="${d>0?'up':'down'}">${d>0?'+':''}${p2f.format(d)} %</span> ggü. Vorjahr`}
+function renderKpis(y){y=+y;const t=tot(y),pr=y>2023?tot(y-1):null;
+ const cards=[
+  ['Registrierte Hunde',f(t.reg),pr?delta(t.reg,pr.reg).replace('up','x').replace('down','x'):'erstes Berichtsjahr'],
+  ['Bisse mit Verletzung – Mensch',f(t.hm),(t.hmE!=null?`davon ${f(t.hmE)} erheblich · `:'')+(pr?delta(t.hm,pr.hm):'')],
+  ['Bisse mit Verletzung – Tier',f(t.an),(t.anE!=null?`davon ${f(t.anE)} erheblich · `:'')+(pr?delta(t.an,pr.an):'')],
+  ['Sonstige gefährliche Vorfälle',f(t.so),pr?delta(t.so,pr.so):''],
+  ['Gefährlich im Einzelfall (§ 3 Abs. 3)',f(t.d33),pr?delta(t.d33,pr.d33):''],
+  ['Strafverfahren / Bußgeldverfahren',`${f(t.st)} / ${f(t.owi)}`,'gegen Halterinnen und Halter'],
+  ['Todesfälle durch Hundebisse','0','2023, 2024 und 2025']];
+ if(y===2023)cards[1][2]=cards[2][2]='Erheblichkeit erst ab 2024 erfasst';
+ $('#kpis').innerHTML=cards.map(c=>`<div class="card kpi"><div class="l">${c[0]}</div><div class="v">${c[1]}</div><div class="d">${c[2]}</div></div>`).join('')}
+seg('#kpiYear',renderKpis);renderKpis(2025);
+
+(function(){const t=tot(2025),d=DATA[2025],g=n=>d.find(r=>r.name===n).reg;
+ const aus=g('Australian Shepherd'),dsh=g('Deutscher Schäferhund'),p11=tot(2025,'p11').reg;
+ const items=[{n:'§ 3 gefährliche Hunde',v:tot(2025,'p3').reg,c:'var(--c3)'},{n:'§ 10 bestimmte Rassen',v:tot(2025,'p10').reg,c:'var(--c10)'},
+  {n:'Deutscher Schäferhund',v:dsh,c:'var(--y25)'},{n:'Australian Shepherd',v:aus,c:'var(--y24)'},
+  {n:'übrige große Hunde (§ 11)',v:p11-dsh-aus,c:'var(--c11)'},{n:'kleine Hunde*',v:tot(2025,'kl').reg,c:'var(--ck)'}];
+ const r=70,C=2*Math.PI*r;let off=0,s=`<svg viewBox="0 0 200 200"><g transform="rotate(-90 100 100)">`;
+ items.forEach(it=>{const len=it.v/t.reg*C;s+=`<circle cx="100" cy="100" r="${r}" style="fill:none;stroke:${it.c}" stroke-width="34" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" data-tip="${it.n}: ${f(it.v)} (${p2f.format(it.v/t.reg*100)} %)"/>`;off+=len});
+ s+=`</g><text x="100" y="98" text-anchor="middle" style="font-size:19px;font-weight:650;fill:var(--ink)">${f(t.reg)}</text><text x="100" y="117" text-anchor="middle">Hunde</text></svg>`;
+ s+='<div class="dl">'+items.map(it=>`<div><span><i style="background:${it.c}"></i>${it.n}</span><b>${p2f.format(it.v/t.reg*100)} %</b></div>`).join('')+'<p class="note">* nicht meldepflichtig – tatsächliche Zahl vermutlich höher</p></div>';
+ $('#donut').innerHTML=s})();
+
+/* --- Entwicklung --- */
+const TRNOTE={p3:'Seit 2006 mehr als halbiert. 2025 mit 5.893 Hunden der niedrigste Stand seit Inkrafttreten des Gesetzes (2003).',
+ p10:'Stetig rückläufig – von 12.389 (2006) auf 7.867 (2025). Rottweiler stellen rund die Hälfte.',
+ p11:'Langfristig steigend; Höchststand 2024 mit 613.768, 2025 leicht rückläufig (Achse beginnt bei 500.000).'};
+function renderTrend(c){const t=TREND[c];lineChart($('#trChart'),t.v.map((_,i)=>t.from+i),t.v,{color:CAT[c].col,min:t.min||0});$('#trNote').textContent=TRNOTE[c]}
+seg('#trCat',renderTrend);renderTrend('p3');
+function renderQuote(m){const cats=['p3','p10','p11','kl'],cols=['var(--y23)','var(--y24)','var(--y25)'];
+ barChart($('#qChart'),cats.map(c=>CAT[c].short==='klein'?'kleine Hunde':CAT[c].short+(c==='p11'?' große':'')),
+  YEARS.map((y,i)=>({name:String(y),color:cols[i],values:cats.map(c=>{const t=tot(y,c);return rate(t[m],t.reg)})})),{fmt:v=>p3f.format(v),unit:' je 100 Hunde'})}
+seg('#qMet',renderQuote);renderQuote('hm');
+function renderAbs(c){const a=ABS[c];barChart($('#absChart'),[2021,2022,2023,2024,2025],
+ [{name:'Bisse – Mensch',color:'var(--hum)',values:a.hm},{name:'Bisse – Tier',color:'var(--ani)',values:a.an},{name:'sonstige Vorfälle',color:'var(--oth)',values:a.so}])}
+seg('#absCat',renderAbs);renderAbs('p3');
+
+/* --- Rassen-Explorer --- */
+const st={y:2025,m:'hm',cat:null,sort:'rate',asc:false,q:'',min:false};
+function renderCatCards(){$('#catcards').innerHTML=Object.keys(CAT).map(c=>{const t=tot(st.y,c);
+ return`<div class="card catcard${st.cat===c?' sel':''}" data-c="${c}" style="border-left-color:${CAT[c].col}"><div class="n">${CAT[c].name}</div><div class="s">${f(t.reg)} Hunde · ${f(t[st.m])} Vorfälle · <b>${p3f.format(rate(t[st.m],t.reg))}</b> je 100</div></div>`}).join('')}
+$('#catcards').addEventListener('click',e=>{const c=e.target.closest('.catcard');if(!c)return;st.cat=st.cat===c.dataset.c?null:c.dataset.c;renderBreeds()});
+function renderBreeds(){renderCatCards();const m=st.m,eK=m==='so'?null:m+'E',q=st.q.toLowerCase();
+ let rows=DATA[st.y].filter(r=>(!st.cat||r.cat===st.cat)&&(!st.min||r.reg>=500)&&(!q||r.name.toLowerCase().includes(q)))
+  .map(r=>({...r,abs:r[m],e:eK?r[eK]:null,rate:rate(r[m],r.reg)}));
+ const k=st.sort;rows.sort((a,b)=>{const v=k==='name'?a.name.localeCompare(b.name,'de'):a[k]-b[k];return st.asc?v:-v});
+ const mx=Math.max(...rows.map(r=>r.rate),0.0001);
+ $('#bBody').innerHTML=rows.length?rows.map(r=>`<tr data-n="${r.name}"><td>${r.name}<span class="badge" style="background:${CAT[r.cat].col}">${CAT[r.cat].short}</span></td>
+  <td>${f(r.reg)}</td><td>${f(r.abs)}${r.e!=null&&r.abs?`<br><small>${f(r.e)} erh.</small>`:''}</td>
+  <td class="rate"><span class="${r.reg<500?'dim':''}">${p3f.format(r.rate)}${r.reg<500?'*':''}</span><div class="bar"><span style="width:${r.rate/mx*100}%;background:${CAT[r.cat].col}"></span></div></td></tr>`).join('')
+  :'<tr><td colspan="4" style="text-align:center;color:var(--mute)">Keine Treffer</td></tr>';
+ document.querySelectorAll('th[data-s]').forEach(th=>{th.classList.toggle('s',th.dataset.s===k);th.classList.toggle('asc',th.dataset.s===k&&st.asc)})}
+seg('#bYear',v=>{st.y=+v;renderBreeds()});
+$('#bMet').onchange=e=>{st.m=e.target.value;renderBreeds()};
+$('#bQ').oninput=e=>{st.q=e.target.value;renderBreeds()};
+$('#bMin').onchange=e=>{st.min=e.target.checked;renderBreeds()};
+document.querySelectorAll('th[data-s]').forEach(th=>th.onclick=()=>{const s=th.dataset.s;if(st.sort===s)st.asc=!st.asc;else{st.sort=s;st.asc=s==='name'}renderBreeds()});
+$('#bBody').addEventListener('click',e=>{const tr=e.target.closest('tr[data-n]');if(tr)openDetail(tr.dataset.n)});
+renderBreeds();
+
+function openDetail(name){const rec=YEARS.map(y=>DATA[y].find(r=>r.name===name));const c=rec.find(Boolean).cat;
+ const cell=(r,fn)=>r?fn(r):'<small>nicht erfasst</small>';
+ const lines=[['Registrierte Hunde',r=>f(r.reg)],
+  ['Bisse – Mensch',r=>f(r.hm)+(r.hmE!=null?` <small>(${f(r.hmE)} erh.)</small>`:'')],['&nbsp;&nbsp;je 100 Hunde',r=>p3f.format(rate(r.hm,r.reg))],
+  ['Bisse – Tier',r=>f(r.an)+(r.anE!=null?` <small>(${f(r.anE)} erh.)</small>`:'')],['&nbsp;&nbsp;je 100 Hunde',r=>p3f.format(rate(r.an,r.reg))],
+  ['Sonstige Vorfälle',r=>f(r.so)],['&nbsp;&nbsp;je 100 Hunde',r=>p3f.format(rate(r.so,r.reg))],
+  ['Gefährlich im Einzelfall',r=>f(r.d33)],['Strafverfahren',r=>f(r.st)],['Bußgeldverfahren',r=>f(r.owi)]];
+ $('#sheet').innerHTML=`<button class="x" aria-label="Schließen">×</button><h3 style="font-size:18px;margin:2px 0 2px">${name}</h3>
+  <div style="font-size:13px;color:var(--mute)"><span class="badge" style="background:${CAT[c].col};margin-left:0">${CAT[c].short}</span> ${CAT[c].name}</div>
+  ${NOTES[name]?`<div class="nt">${NOTES[name]}</div>`:''}
+  <table><thead><tr><th style="cursor:default"></th>${YEARS.map(y=>`<th style="cursor:default">${y}</th>`).join('')}</tr></thead>
+  <tbody>${lines.map(l=>`<tr style="cursor:default"><td>${l[0]}</td>${rec.map(r=>`<td>${cell(r,l[1])}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+ $('#detail').classList.add('open')}
+$('#detail').addEventListener('click',e=>{if(e.target.id==='detail'||e.target.closest('.x'))$('#detail').classList.remove('open')});
+addEventListener('keydown',e=>{if(e.key==='Escape')$('#detail').classList.remove('open')});
+
+/* --- Erhebliche Verletzungen --- */
+function renderSevere(k){const cats=['p3','p10','p11','kl'];const val=(y,c)=>{const t=tot(y,c);return rate(t[k],t.reg)};
+ const mx=Math.max(...cats.flatMap(c=>[val(2024,c),val(2025,c)]));
+ $('#svBars').innerHTML=cats.map(c=>{const t5=tot(2025,c);return`<div class="hb"><div class="t"><b>${CAT[c].name}</b><span style="color:var(--mute);font-size:12.5px">2025: ${f(t5[k])} von ${f(t5.reg)} Hunden</span></div>`+
+  [2024,2025].map(y=>`<div class="row"><span class="y">${y}</span><div class="track"><span style="width:${val(y,c)/mx*100}%;background:${CAT[c].col};opacity:${y===2024?.55:1}"></span></div><span class="val">${p3f.format(val(y,c))}</span></div>`).join('')+'</div>'}).join('');
+ const a=val(2025,'p3'),b=val(2025,'p10'),g=val(2025,'p11'),s=val(2025,'kl');
+ $('#svNote').textContent=`Werte = erhebliche Vorfälle je 100 Hunde. 2025 lag die Quote bei § 3-Hunden ${p2f.format(a/g)}-mal und bei § 10-Hunden ${p2f.format(b/g)}-mal so hoch wie bei großen Hunden allgemein; gegenüber kleinen Hunden ist der Abstand noch deutlich größer (Faktor ${Math.round(a/s)}). Erhebliche Verletzungen werden erst seit 2024 erfasst – ob sich die Tendenz bestätigt, soll sich in den Folgejahren zeigen.`}
+seg('#svMet',renderSevere);renderSevere('hmE');
+
+/* --- Regierungsbezirke --- */
+function renderReg(c){const r=REG[c],names=Object.keys(r.d),cols={2021:'var(--y21)',2022:'var(--y22)',2023:'var(--y23)',2024:'var(--y24)',2025:'var(--y25)'};
+ barChart($('#rgChart'),names,r.years.map((y,i)=>({name:String(y),color:cols[y],values:names.map(n=>r.d[n][i])})),{unit:' Hunde'});
+ const sums=r.years.map((y,i)=>names.reduce((a,n)=>a+r.d[n][i],0)),last=sums.length-1,top=names.reduce((a,n)=>r.d[n][last]>r.d[a][last]?n:a);
+ $('#rgNote').textContent=`Meiste Hunde ${r.years[last]}: Bezirk ${top} (${f(r.d[top][last])}). `+(c==='p3'?'Hinweis: Die Bezirkswerte aus Abb. 2 des Berichts ergeben in einzelnen Jahren leicht andere Summen als die Landeszahl.':'')}
+seg('#rgCat',renderReg);renderReg('p3');
+</script>
+</body>
+</html>
